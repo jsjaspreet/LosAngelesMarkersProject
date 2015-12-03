@@ -1,10 +1,7 @@
-debugger;
 console.log('\'Allo \'Allo!');
 var map;
 
 function initMap() {
-  debugger;
-  console.log("Initiated map init");
   var locations = [
     { "coordinates": new google.maps.LatLng(34.134208, -118.321548),
       "name": "Hollywood Sign"},
@@ -20,7 +17,7 @@ function initMap() {
       "name": "LACMA"},
     { "coordinates": new google.maps.LatLng(34.078187, -118.474031),
       "name": "The Getty"}];
-  console.log("Set Locations");
+
 
   map = new google.maps.Map(document.getElementById('map'), {
     center: new google.maps.LatLng(34.090642, -118.364720),
@@ -28,11 +25,11 @@ function initMap() {
   });
 
   var markers = [];
-  var marker;
+  var marker, i, location;
+  console.log(locations.length);
   for(i=0; i < locations.length; i++){
-    console.log("Creating markers");
     location = locations[i];
-    marker = new google.maps.Marker({position: location.coordinates});
+    marker = new google.maps.Marker({position: location["coordinates"]});
     markers.push(marker);
     marker.setMap(map);
   }
