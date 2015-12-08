@@ -1,11 +1,12 @@
 console.log('\'Allo \'Allo!');
 
 var markers;
+var allLocations;
 
 function initMap() {
 
-  var map, i,locations,marker,location;
-  locations = [
+  var map, i,marker,location;
+  allLocations = [
     {
       "coordinates": new google.maps.LatLng(34.134208, -118.321548),
       "name": "Hollywood Sign"
@@ -44,8 +45,8 @@ function initMap() {
   markers = [];
 
   // For each location, create a marker on map and add to markers array
-  for (i = 0; i < locations.length; i++) {
-    location = locations[i];
+  for (i = 0; i < allLocations.length; i++) {
+    location = allLocations[i];
     marker = new google.maps.Marker({position: location["coordinates"],
     name: location["name"]});
     console.log(marker);
@@ -56,16 +57,34 @@ function initMap() {
 }
 
 
+// Set marker as visible if query matches name of Marker
 var filterMarkersByQuery = function(query){
   for(var i=0; i < markers.length; i++){
     marker = markers[i];
-    //console.log(marker.name, marker.name.toLowerCase().indexOf(query.toLowerCase()));
-    //console.log(marker.name, marker.name.toLowerCase().indexOf(query.toLowerCase()) != -1);
     var match = marker.name.toLowerCase().indexOf(query.toLowerCase()) === -1;
-    if (match){
-      marker.setVisible(false);
-    }
+    marker.setVisible(!match);
   }
 };
+
+// Allow query to be accessed in global scope
+var filter = ko.observable("query");
+
+function AppViewModel(){
+  this.query = filter;
+  this.checkValue = function(){
+    console.log(this.query());
+    filterMarkersByQuery(this.query());
+  };
+}
+  // Disable enter behavior
+  $('#filterQuery').keydown(function(e) {
+  if(e.keyCode == 13) { // enter key was pressed
+    filterMarkersByQuery(AppViewModel().query());
+    return false;
+  }
+  });
+// Activate knockout.js
+ko.applyBindings(new AppViewModel());
+
 
 

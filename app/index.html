@@ -25,6 +25,10 @@
 
     <!-- knockout -->
     <script src="/bower_components/knockout/dist/knockout.js"></script>
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
     <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
       #map { height: 100%; }
@@ -35,8 +39,18 @@
     <!--[if lt IE 10]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+
     <div class="container-fluid">
     <div id="sidebar">
+      <form class="text-center form-inline">
+          <input id="filterQuery" data-bind="value: query, valueUpdate: 'afterkeydown'" type="text"/>
+          <button class="btn btn-primary" data-bind="click: checkValue"><i class="fa fa-filter">Filter </i></button>
+      </form>
+      <ul data-bind="foreach: locations">
+        <li><span data-bind="text: $data"></span></li>
+      </ul>
+
+
     </div>
     <div id="map"></div>
     </div>
