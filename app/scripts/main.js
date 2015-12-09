@@ -1,8 +1,7 @@
 console.log('\'Allo \'Allo!');
 
-var markers;
-var allLocations;
-
+var markers, allLocations;
+var selections = ko.observableArray();
 function initMap() {
 
   var map, i,marker,location;
@@ -35,6 +34,9 @@ function initMap() {
       "coordinates": new google.maps.LatLng(34.078187, -118.474031),
       "name": "The Getty"
     }];
+  for(var x=0; x < allLocations.length; x++){
+    selections.push(allLocations[x].name);
+  }
 
   // Initialize map with a center of Los Angeles
   map = new google.maps.Map(document.getElementById('map'), {
@@ -59,10 +61,14 @@ function initMap() {
 
 // Set marker as visible if query matches name of Marker
 var filterMarkersByQuery = function(query){
+  selections.removeAll();
   for(var i=0; i < markers.length; i++){
     marker = markers[i];
     var match = marker.name.toLowerCase().indexOf(query.toLowerCase()) === -1;
     marker.setVisible(!match);
+    if(!match){
+      selections.push(marker.name);
+    }
   }
 };
 
@@ -71,6 +77,7 @@ var filter = ko.observable("query");
 
 function AppViewModel(){
   this.query = filter;
+  this.selections = selections;
 }
   // Disable enter behavior
   $('#filterQuery').keydown(function(e) {
