@@ -44,10 +44,11 @@
     <div id="sidebar">
       <form class="text-center form-inline">
           <input id="filterQuery" data-bind="value: query, valueUpdate: 'afterkeydown'" type="text"/>
-          <button class="btn btn-primary" data-bind="click: checkValue"><i class="fa fa-filter">Filter </i></button>
+          <button class="btn btn-primary" data-bind="click: filter"><i class="fa fa-filter">Filter </i></button>
       </form>
-
-          <span data-bind="value: selections"></span>
+      <ul data-bind="foreach: selections">
+        <li data-bind="text: $data"></li>
+      </ul>
 
 
     </div>

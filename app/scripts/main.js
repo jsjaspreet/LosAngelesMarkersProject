@@ -78,6 +78,9 @@ var filter = ko.observable("query");
 function AppViewModel(){
   this.query = filter;
   this.selections = selections;
+  this.filter =  function(){
+    filterMarkersByQuery(filter());
+  };
 }
   // Disable enter behavior
   $('#filterQuery').keydown(function(e) {
