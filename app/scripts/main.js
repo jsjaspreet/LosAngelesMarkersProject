@@ -71,15 +71,11 @@ var filter = ko.observable("query");
 
 function AppViewModel(){
   this.query = filter;
-  this.checkValue = function(){
-    console.log(this.query());
-    filterMarkersByQuery(this.query());
-  };
 }
   // Disable enter behavior
   $('#filterQuery').keydown(function(e) {
   if(e.keyCode == 13) { // enter key was pressed
-    filterMarkersByQuery(AppViewModel().query());
+    filterMarkersByQuery(filter());
     return false;
   }
   });
