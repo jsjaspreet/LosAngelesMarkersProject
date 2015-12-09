@@ -62,15 +62,54 @@ function initMap() {
 
 }
 
-// Add animation and extra info for a marker using closure
+function hello() {
+  console.log('hello');
+}
+// Add animation and extra info for a marker, closure use ahead!
 function animate(marker) {
   var loc = marker;
-  var contentString = '<div><img src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location=' + marker.position.lat() + "," + marker.position.lng() + '&key=AIzaSyCW-LDU7uVXeUj5R38Hwt9ucd9LsQ5hA0Y\"></div>';
+
+  // Base foursquare API call populated with lat long coords of our locations
+  var foursquare_request_url = "https://api.foursquare.com/v2/venues/search?" +
+    "client_id=QI5R20V4HCZWOCYDWMMXKQ03PDV05C1NIN0HIBSHJF20NWK2&" +
+    "client_secret=2XPJM0OD0L2ZH0Q1QQMPCAYDOSURIX4T4DHMGACWTYDX21QL&v=20130815&" +
+    "ll=" + marker.position.lat() + "," + marker.position.lng();
+
+  var location_url, number_checked_in;
+  var contentString = '<div id="marker' + marker.name.substr(0, 2) + '"><h2 class="text-center">' + marker.name + '</h2>' +
+    '<img src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location='
+    + marker.position.lat() + "," + marker.position.lng() +
+    '&key=AIzaSyCW-LDU7uVXeUj5R38Hwt9ucd9LsQ5hA0Y\"></div>';
   var infoWindow = new google.maps.InfoWindow({
     content: contentString
   });
 
+  // Add asynchronous ajax call to update the infoWindow with more data if possible
+  $.ajax({
+    url: foursquare_request_url
+  }).done(function (data) {
+    // On success, show foursquare data
+    location_url = data.response.venues[0].url;
+    number_checked_in = data.response.venues[0].stats.checkinsCount;
+    var contentString = '<div class="text-center"><h2>' + marker.name + '</h2>' +
+      '<span><a href="' + location_url + '">' + location_url + '</a>' +
+      '<h5>Checkins: ' + number_checked_in + '</h5></span>' +
+      '<img src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location='
+      + marker.position.lat() + "," + marker.position.lng() +
+      '&key=AIzaSyCW-LDU7uVXeUj5R38Hwt9ucd9LsQ5hA0Y\"></div>';
+    infoWindow.setContent(contentString);
+  }).fail(function (xhr, status) {
+    // On  failure, do not show null content
+    var contentString = '<div class="text-center"><h2>' + marker.name + '</h2>' +
+      '<img src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location='
+      + marker.position.lat() + "," + marker.position.lng() +
+      '&key=AIzaSyCW-LDU7uVXeUj5R38Hwt9ucd9LsQ5hA0Y\"></div>';
+    infoWindow.setContent(contentString);
+  });
+
+
   function toggle() {
+
     loc.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function () {
       loc.setAnimation(null);
