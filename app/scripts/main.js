@@ -1,10 +1,9 @@
-console.log('\'Allo \'Allo!');
-
 var markers, allLocations;
 var selections = ko.observableArray();
+var map;
 function initMap() {
 
-  var map, i,marker,location;
+  var i,marker,location;
   allLocations = [
     {
       "coordinates": new google.maps.LatLng(34.134208, -118.321548),
@@ -15,7 +14,7 @@ function initMap() {
       "name": "Santa Monica Pier"
     },
     {
-      "coordinates": new google.maps.LatLng(34.138132, -118.353273),
+      "coordinates": new google.maps.LatLng(34.135999, -118.351410),
       "name": "Universal Studios Hollywood"
     },
     {
@@ -55,25 +54,26 @@ function initMap() {
       label: location["name"][0],
       animation: google.maps.Animation.DROP
     });
-   marker.addListener('click', toggleBounce(marker));
+   marker.addListener('click', animate(marker));
 
-    console.log(marker);
     markers.push(marker);
     marker.setMap(map);
   }
 
 }
 
-// Use a closure to create a toggle function on click for each marker
-function toggleBounce(marker) {
+// Add animation and extra info for a marker
+function animate(marker) {
   var loc = marker;
+  console.log(marker);
+  var contentString = '<div><img src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location='+marker.position.lat()+","+marker.position.lng()+'&key=AIzaSyCW-LDU7uVXeUj5R38Hwt9ucd9LsQ5hA0Y\"></div>';
+  var infoWindow = new google.maps.InfoWindow({
+    content: contentString
+  });
   function toggle(){
-    
-    if (loc.getAnimation() !== null) {
-      loc.setAnimation(null);
-    } else {
-      loc.setAnimation(google.maps.Animation.BOUNCE);
-    }
+    loc.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){ loc.setAnimation(null); }, 850);
+    infoWindow.open(map, loc);
   }
   return toggle;
 }
@@ -99,6 +99,9 @@ function AppViewModel(){
   this.selections = selections;
   this.filter =  function(){
     filterMarkersByQuery(filter());
+  };
+  this.select = function(){
+    console.log("Hello");
   };
 }
   // Disable enter behavior
