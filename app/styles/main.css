@@ -120,6 +120,8 @@ body {
 
 .location {
   margin-top: 15px;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 

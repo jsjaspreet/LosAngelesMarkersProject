@@ -65,7 +65,6 @@ function initMap() {
 // Add animation and extra info for a marker
 function animate(marker) {
   var loc = marker;
-  console.log(marker);
   var contentString = '<div><img src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location='+marker.position.lat()+","+marker.position.lng()+'&key=AIzaSyCW-LDU7uVXeUj5R38Hwt9ucd9LsQ5hA0Y\"></div>';
   var infoWindow = new google.maps.InfoWindow({
     content: contentString
@@ -100,8 +99,17 @@ function AppViewModel(){
   this.filter =  function(){
     filterMarkersByQuery(filter());
   };
-  this.select = function(){
-    console.log("Hello");
+  this.select = function(location){
+    console.log(location);
+    for(var i=0; i < markers.length; i++){
+      marker = markers[i];
+      console.log(marker.name);
+      var match = marker.name.toLowerCase().indexOf(location.toLowerCase()) != -1;
+      if(match){
+        animate(marker)();
+      }
+    }
+
   };
 }
   // Disable enter behavior
