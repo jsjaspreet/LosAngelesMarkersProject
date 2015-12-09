@@ -49,8 +49,14 @@ function initMap() {
   // For each location, create a marker on map and add to markers array
   for (i = 0; i < allLocations.length; i++) {
     location = allLocations[i];
-    marker = new google.maps.Marker({position: location["coordinates"],
-    name: location["name"]});
+    marker = new google.maps.Marker({
+      position: location["coordinates"],
+      name: location["name"],
+      label: location["name"][0],
+      animation: google.maps.Animation.DROP
+    });
+   marker.addListener('click', toggleBounce(marker));
+
     console.log(marker);
     markers.push(marker);
     marker.setMap(map);
@@ -58,6 +64,19 @@ function initMap() {
 
 }
 
+// Use a closure to create a toggle function on click for each marker
+function toggleBounce(marker) {
+  var loc = marker;
+  function toggle(){
+    
+    if (loc.getAnimation() !== null) {
+      loc.setAnimation(null);
+    } else {
+      loc.setAnimation(google.maps.Animation.BOUNCE);
+    }
+  }
+  return toggle;
+}
 
 // Set marker as visible if query matches name of Marker
 var filterMarkersByQuery = function(query){
