@@ -1,9 +1,9 @@
 var markers, allLocations;
 var selections = ko.observableArray();
-var map;
-function initMap() {
+var map, marker;
 
-  var i,marker,location;
+function initMap() {
+  var i, location;
   allLocations = [
     {
       "coordinates": new google.maps.LatLng(34.134208, -118.321548),
@@ -33,7 +33,7 @@ function initMap() {
       "coordinates": new google.maps.LatLng(34.078187, -118.474031),
       "name": "The Getty"
     }];
-  for(var x=0; x < allLocations.length; x++){
+  for (var x = 0; x < allLocations.length; x++) {
     selections.push(allLocations[x].name);
   }
 
@@ -54,7 +54,7 @@ function initMap() {
       label: location["name"][0],
       animation: google.maps.Animation.DROP
     });
-   marker.addListener('click', animate(marker));
+    marker.addListener('click', animate(marker));
 
     markers.push(marker);
     marker.setMap(map);
@@ -62,29 +62,34 @@ function initMap() {
 
 }
 
-// Add animation and extra info for a marker
+// Add animation and extra info for a marker using closure
 function animate(marker) {
   var loc = marker;
-  var contentString = '<div><img src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location='+marker.position.lat()+","+marker.position.lng()+'&key=AIzaSyCW-LDU7uVXeUj5R38Hwt9ucd9LsQ5hA0Y\"></div>';
+  var contentString = '<div><img src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location=' + marker.position.lat() + "," + marker.position.lng() + '&key=AIzaSyCW-LDU7uVXeUj5R38Hwt9ucd9LsQ5hA0Y\"></div>';
   var infoWindow = new google.maps.InfoWindow({
     content: contentString
   });
-  function toggle(){
+
+  function toggle() {
     loc.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function(){ loc.setAnimation(null); }, 850);
+    setTimeout(function () {
+      loc.setAnimation(null);
+    }, 850);
     infoWindow.open(map, loc);
   }
+
   return toggle;
 }
 
 // Set marker as visible if query matches name of Marker
-var filterMarkersByQuery = function(query){
+// Also update selections
+var filterMarkersByQuery = function (query) {
   selections.removeAll();
-  for(var i=0; i < markers.length; i++){
+  for (var i = 0; i < markers.length; i++) {
     marker = markers[i];
     var match = marker.name.toLowerCase().indexOf(query.toLowerCase()) === -1;
     marker.setVisible(!match);
-    if(!match){
+    if (!match) {
       selections.push(marker.name);
     }
   }
@@ -93,32 +98,32 @@ var filterMarkersByQuery = function(query){
 // Allow query to be accessed in global scope
 var filter = ko.observable("");
 
-function AppViewModel(){
+function AppViewModel() {
   this.query = filter;
   this.selections = selections;
-  this.filter =  function(){
+  this.filter = function () {
     filterMarkersByQuery(filter());
   };
-  this.select = function(location){
-    console.log(location);
-    for(var i=0; i < markers.length; i++){
+  this.select = function (location) {
+    for (var i = 0; i < markers.length; i++) {
       marker = markers[i];
-      console.log(marker.name);
       var match = marker.name.toLowerCase().indexOf(location.toLowerCase()) != -1;
-      if(match){
+      if (match) {
         animate(marker)();
       }
     }
 
   };
 }
-  // Disable enter behavior
-  $('#filterQuery').keydown(function(e) {
-  if(e.keyCode == 13) { // enter key was pressed
+
+// Redefine enter behavior on filter
+$('#filterQuery').keydown(function (e) {
+  if (e.keyCode == 13) { // enter key was pressed
     filterMarkersByQuery(filter());
     return false;
   }
-  });
+});
+
 // Activate knockout.js
 ko.applyBindings(new AppViewModel());
 
