@@ -46,8 +46,9 @@
           <input id="filterQuery" data-bind="value: query, valueUpdate: 'afterkeydown'" type="text"/>
           <button class="btn btn-primary" data-bind="click: filter"><i class="fa fa-filter">Filter </i></button>
       </form>
-      <ul data-bind="foreach: selections">
-        <li data-bind="text: $data"></li>
+      <h1 id="list-title" class="text-center">Locations</h1>
+      <ul class="locations" data-bind="foreach: selections">
+        <li class="location" data-bind="text: $data"></li>
       </ul>
 
 

@@ -73,7 +73,7 @@ var filterMarkersByQuery = function(query){
 };
 
 // Allow query to be accessed in global scope
-var filter = ko.observable("query");
+var filter = ko.observable("");
 
 function AppViewModel(){
   this.query = filter;

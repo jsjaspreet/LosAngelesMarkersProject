@@ -98,7 +98,7 @@ body {
   top: 0; bottom: 0; left: 0;
   padding-top:10px;
   width: 240px;
-  /*background: black;*/
+  background: black;
 }
 
 #filterQuery {
@@ -108,5 +108,18 @@ body {
   font-size: 1.2em;
 }
 
+.locations {
+  font: bolder 1.3em sans-serif;
+  color: floralwhite;
+}
+
+#list-title {
+  margin-top: 40px;
+  color: navajowhite;
+}
+
+.location {
+  margin-top: 15px;
+}
 
 
