@@ -10,6 +10,10 @@ function initMap() {
       "name": "Hollywood Sign"
     },
     {
+      "coordinates": new google.maps.LatLng(34.018315, -118.285063),
+      "name": "USC"
+    },
+    {
       "coordinates": new google.maps.LatLng(34.009565, -118.497404),
       "name": "Santa Monica Pier"
     },
